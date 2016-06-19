@@ -15,11 +15,24 @@ public class PlayerManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
-        /*if (treeScript.isWorking == true)
+        if(Input.GetMouseButtonDown(0))
         {
-            //woodResource += treeScript.
-
-        }*/
+            checkObjectSelected();
+        }
+        
 	}
+
+    private void checkObjectSelected()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            if(hit.transform.tag != "Unselectionable")
+            {
+                Debug.Log(hit.transform.gameObject.name);
+            }
+        }
+    }
 }

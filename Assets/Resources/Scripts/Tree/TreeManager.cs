@@ -16,7 +16,6 @@ public class TreeManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
     }    
 
     public float gather(float gatherSpeed)
