@@ -39,6 +39,6 @@ public class TreeManager : MonoBehaviour {
 
     private void work()
     {
-
+        currentSourceQuantity -= outputSpeed * Time;
     }
 }
