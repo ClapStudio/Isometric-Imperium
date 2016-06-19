@@ -7,7 +7,7 @@ public class TreeManager : MonoBehaviour {
     public float sourceQuantity;
 
     private float currentSourceQuantity;
-    private bool isWorking;
+    public bool isWorking;
 
     // Use this for initialization
     void Start () {
@@ -42,6 +42,7 @@ public class TreeManager : MonoBehaviour {
         Debug.Log("Working.");
         currentSourceQuantity -= outputSpeed * Time.deltaTime;
         Debug.Log("Remaining source quantity: " + currentSourceQuantity + ".");
+
         if(currentSourceQuantity <= 0)
         {
             endWork();
@@ -52,5 +53,6 @@ public class TreeManager : MonoBehaviour {
     {
         Debug.Log("End Work.");
         isWorking = false;
+        Destroy(this.gameObject);
     }
 }
