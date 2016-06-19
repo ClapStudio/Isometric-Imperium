@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class WoodCounter : MonoBehaviour {
 
     public Text woodResourceShow;
     public int woodCounter;
+
     private PlayerManager playerManager;
 
 
