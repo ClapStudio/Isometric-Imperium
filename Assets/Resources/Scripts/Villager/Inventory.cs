@@ -14,4 +14,16 @@
         }
         return false;
     }
+
+    public void addQuanity(float quantity) {
+        actualQuantity += quantity;
+    }
+
+    public float getActualQuantity() {
+        return actualQuantity;
+    }
+
+    public float getMaxCapacity() {
+        return maxCapacity;
+    }
 }
