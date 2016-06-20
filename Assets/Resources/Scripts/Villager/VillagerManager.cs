@@ -3,12 +3,14 @@ using System.Collections;
 
 public class VillagerManager : MonoBehaviour {
 
+    private Villager villager;
+
     public float inventoryCapacity;
     public float gatherSpeed;
 
     public float currentInventorySpace;
     private GameObject objectWorkingOn;
-    private TreeManager targetManager;
+    private Resource resource;
     private bool isWorking;
 
     private GameObject target;
@@ -16,40 +18,15 @@ public class VillagerManager : MonoBehaviour {
 
     private NavMeshAgent nav;
 
-
     // Use this for initialization
     void Start () {
-        inventoryCapacity = 30f;
-        currentInventorySpace = 0;
-        gatherSpeed = 5;
+        villager = new Villager(this);
 
-        isWorking = false;
-        isMoving = false;
-
-        nav = GetComponent<NavMeshAgent>();
     }
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetMouseButtonDown(0))
-        {
-            objectWorkingOn = GameObject.FindGameObjectWithTag("Tree");
-            targetManager = objectWorkingOn.GetComponent<TreeManager>();
-            target = GameObject.FindGameObjectWithTag("Tree");
-            //TODO: check if villager has arrived to his targed
-            nav.SetDestination(target.transform.position);
-            isMoving = true;
-        }
-
-        if(isMoving)
-        {
-            move();
-        }
-
-        if (isWorking)
-        {
-            work();
-        }
+        villager.action();
     }
 
     private void startWork()
@@ -68,17 +45,17 @@ public class VillagerManager : MonoBehaviour {
         isMoving = true;
     }
 
-    private void work()
+    /*private void work()
     {
         Debug.Log("Working.");
-        float resourceObtainedQuantity = targetManager.gather(gatherSpeed);
+        float resourceObtainedQuantity = resource.gather(gatherSpeed);
         currentInventorySpace += resourceObtainedQuantity;
 
-        if (currentInventorySpace >= inventoryCapacity || targetManager.getCurrentSourceQuantity() <= 0)
+        if (currentInventorySpace >= inventoryCapacity || resource.getCurrentSourceQuantity() <= 0)
         {            
             endWork();
         }
-    }
+    }*/
 
     void OnTriggerEnter(Collider other)
     {
@@ -94,5 +71,9 @@ public class VillagerManager : MonoBehaviour {
     private void move()
     {
         nav.enabled = true;
+    }
+
+    public void assignResource(Resource resource) {
+        villager.assignWork(resource);
     }
 }

@@ -31,7 +31,10 @@ public class PlayerManager : MonoBehaviour {
         {
             if(hit.transform.tag != "Unselectionable")
             {
-                Debug.Log(hit.transform.gameObject.name);
+                Resource targetResource = hit.transform.GetComponent<Resource>();
+                VillagerManager villagerManager = GameObject.FindGameObjectWithTag("Villager").GetComponent<VillagerManager>();
+
+                villagerManager.assignResource(targetResource);
             }
         }
     }

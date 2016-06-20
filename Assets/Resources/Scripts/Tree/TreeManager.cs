@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TreeManager : MonoBehaviour {
+public class TreeManager : Resource {
 
     public float sourceQuantity;
 
@@ -16,9 +16,10 @@ public class TreeManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
     }    
 
-    public float gather(float gatherSpeed)
+    public override float gather(float gatherSpeed)
     {
         float initialQuantity = currentSourceQuantity;
         currentSourceQuantity -= gatherSpeed * Time.deltaTime;
