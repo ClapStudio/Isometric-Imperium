@@ -17,7 +17,7 @@ public class TreeManager : Resource {
 	// Update is called once per frame
 	void Update () {
 
-    }    
+    }
 
     public override float gather(float gatherSpeed)
     {

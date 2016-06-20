@@ -4,19 +4,9 @@ using System.Collections;
 public class VillagerManager : MonoBehaviour {
 
     private Villager villager;
-
-    public float inventoryCapacity;
-    public float gatherSpeed;
-
-    public float currentInventorySpace;
-    private GameObject objectWorkingOn;
-    private Resource resource;
-    private bool isWorking;
-
-    private GameObject target;
-    private bool isMoving;
-
-    private NavMeshAgent nav;
+    
+    public Texture2D progressBarEmpty;
+    public Texture2D progressBarFull;
 
     // Use this for initialization
     void Start () {
@@ -26,54 +16,44 @@ public class VillagerManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        villager.action();
+        villagerAction();
     }
-
-    private void startWork()
-    {
-        Debug.Log("Start Work.");
-        isWorking = true;
-    }
-
-    private void endWork()
-    {
-        Debug.Log("End Work.");
-        target = GameObject.FindGameObjectWithTag("Town Hall");
-        move();
-        nav.SetDestination(target.transform.position);
-        isWorking = false;
-        isMoving = true;
-    }
-
-    /*private void work()
-    {
-        Debug.Log("Working.");
-        float resourceObtainedQuantity = resource.gather(gatherSpeed);
-        currentInventorySpace += resourceObtainedQuantity;
-
-        if (currentInventorySpace >= inventoryCapacity || resource.getCurrentSourceQuantity() <= 0)
-        {            
-            endWork();
-        }
-    }*/
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("HIT!");
-        if (other.gameObject == target)
+        if (other.gameObject == villager.getDestination().gameObject)
         {
-            isMoving = false;
-            startWork();
-            nav.enabled = false;
+            Debug.Log("HIT TARGET");
+            villager.destinationArrived();
         }
-    }
-
-    private void move()
-    {
-        nav.enabled = true;
     }
 
     public void assignResource(Resource resource) {
         villager.assignWork(resource);
     }
+
+    private void villagerAction() {
+        //Si no tiene destino, asignarle.
+        if(villager.getDestination() == null) {
+            if(!villager.isNeedClearInventory() && villager.getResourceAssigned() != null) {
+                villager.setDestination(villager.getResourceAssigned());
+            } else if(!villager.isNeedClearInventory() && villager.getResourceAssigned() != null) {
+                villager.setDestination(GameObject.FindGameObjectWithTag("Town Hall").GetComponent<Resource>());
+            }
+        }
+
+        if (villager.isOnDestination() && !villager.isNeedClearInventory() && villager.getDestination() != null) {
+            float gatherResult = villager.getDestination().gather(5);
+            villager.addToInventory(gatherResult);
+
+            if(villager.isInventoryFull()) {
+                villager.setNeedClearInventory(true);
+            }
+        }
+
+        if(villager.isNeedClearInventory()) {
+            villager.setDestination(GameObject.FindGameObjectWithTag("Town Hall").GetComponent<Resource>());
+        }       
+    }
+
 }
