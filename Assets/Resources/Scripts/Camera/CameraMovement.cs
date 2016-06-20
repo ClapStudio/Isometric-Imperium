@@ -1,42 +1,57 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CameraMovement : MonoBehaviour
-{
+public class CameraMovement : MonoBehaviour {
+    public Transform target;
 
-    void Start()
-    {
+    [Header("Rotation")]
+    public float turnSpeed = 4f;
+
+    [Header("Zoom")]
+    public float minFov = 15f;
+    public float maxFov = 90f;
+    public float zoomSensibility = 10f;
+
+    private Vector3 offset;
+    private bool isControlCamera = false;
+
+
+    void Start() {
+        offset = new Vector3(target.position.x, target.position.y + 4f, target.position.z - 7f);
 
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
 
-        float mousePosX = Input.mousePosition.x;
-        float mousePosY = Input.mousePosition.y;
-        int scrollDistance = 5;
-        float scrollSpeed = 70;
+        transform.position = target.position + offset;
+        transform.LookAt(target.position);
 
-        if (mousePosX < scrollDistance)
-        {
-            transform.Translate(Vector3.right * -scrollSpeed * Time.deltaTime);
+        ckeckControls();
+
+        if (isControlCamera) {
+            cameraControl();
+        }
+    }
+
+    private void ckeckControls() {
+        //Camera rotation
+        if (Input.GetMouseButtonDown(1)) {
+            isControlCamera = true;
+        }
+        if (Input.GetMouseButtonUp(1)) {
+            isControlCamera = false;
         }
 
-        if (mousePosX >= Screen.width - scrollDistance)
-        {
-            transform.Translate(Vector3.right * scrollSpeed * Time.deltaTime);
-        }
+        //Camera Zoom
+        float fov = GetComponent<Camera>().fieldOfView;
+        fov -= Input.GetAxis("Mouse ScrollWheel") * zoomSensibility;
+        fov = Mathf.Clamp(fov, minFov, maxFov);
+        Camera.main.fieldOfView = fov;
+    }
 
-        if (mousePosY < scrollDistance)
-        {
-            transform.Translate(transform.forward * -scrollSpeed * Time.deltaTime);
-        }
-
-        if (mousePosY >= Screen.height - scrollDistance)
-        {
-            transform.Translate(transform.forward * scrollSpeed * Time.deltaTime);
-        }
+    private void cameraControl() {
+        offset = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * turnSpeed, Vector3.up) * offset;
     }
 
 }

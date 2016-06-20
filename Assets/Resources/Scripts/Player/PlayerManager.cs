@@ -3,22 +3,19 @@ using System.Collections;
 
 public class PlayerManager : MonoBehaviour {
 
-    private TreeManager treeScript;
-    public float woodResource;
+    private Player player;
 
     // Use this for initialization
     void Start () {
-
-        woodResource = 0;
-
+        player = new Player(this);
     }
 	
 	// Update is called once per frame
 	void Update () {
-        /*if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonDown(0))
         {
             checkObjectSelected();
-        }*/
+        }
         
 	}
 
@@ -26,15 +23,11 @@ public class PlayerManager : MonoBehaviour {
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-
         if (Physics.Raycast(ray, out hit))
         {
-            if(hit.transform.tag != "Unselectionable")
+            if (hit.transform.tag == "Unselectionable")
             {
-                Resource targetResource = hit.transform.GetComponent<Resource>();
-                VillagerManager villagerManager = GameObject.FindGameObjectWithTag("Villager").GetComponent<VillagerManager>();
-
-                villagerManager.assignResource(targetResource);
+                player.setDestinacion(hit.point);
             }
         }
     }
