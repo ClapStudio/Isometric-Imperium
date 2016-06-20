@@ -4,9 +4,6 @@ using System.Collections;
 public class VillagerManager : MonoBehaviour {
 
     private Villager villager;
-    
-    public Texture2D progressBarEmpty;
-    public Texture2D progressBarFull;
 
     // Use this for initialization
     void Start () {
@@ -16,7 +13,28 @@ public class VillagerManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        villagerAction();
+        if (Input.GetMouseButtonDown(0)) {
+            checkAction();
+        }
+
+        //villagerAction();
+    }
+
+    private void checkAction() {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit)) {
+            Debug.Log("aaa");
+            if (hit.transform.tag == "Unselectionable") {
+                Debug.Log("aaa");   
+                villager.nav.SetDestination(hit.point);
+                /*Resource targetResource = hit.transform.GetComponent<Resource>();
+                VillagerManager villagerManager = GameObject.FindGameObjectWithTag("Villager").GetComponent<VillagerManager>();
+
+                villagerManager.assignResource(targetResource);*/
+            }
+        }
     }
 
     void OnTriggerEnter(Collider other)

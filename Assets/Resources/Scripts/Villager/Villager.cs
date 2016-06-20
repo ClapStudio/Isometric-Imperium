@@ -5,7 +5,7 @@ public class Villager {
     private Inventory inventory;
     private float gatherSpeed;
     private Resource resourceAssigned;
-    private NavMeshAgent nav;
+    public NavMeshAgent nav;
     private Resource destination;
     
     private bool onDestination;
