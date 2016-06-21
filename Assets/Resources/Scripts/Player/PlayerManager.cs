@@ -12,7 +12,7 @@ public class PlayerManager : MonoBehaviour {
     public int maxHealth;
     public int currentHealth;
 
-    private Player player;
+    public Player player;
 
     public Animator anim;
 
@@ -143,17 +143,21 @@ public class PlayerManager : MonoBehaviour {
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
         {
-            if (hit.transform.tag == "Unselectionable")
-            {
-                player.setDestinacion(hit.point);
 
-                anim.SetBool("isWalking", true);
+			switch (hit.transform.tag) {
+			case "Unselectionable":
+					player.setDestinacion(hit.point);
 
-                clickOnFX.transform.position = hit.point;
+					anim.SetBool("isWalking", true);
 
-                clickOnFX.Play();
+					clickOnFX.transform.position = hit.point;
 
-            }
+					clickOnFX.Play();
+					break;
+			case "Drop":
+				player.addItemToInventoryById(hit.transform.GetComponent<Drop>().itemId);
+				break;
+			}
         }
     }
 }
