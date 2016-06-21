@@ -5,6 +5,8 @@ public class PlayerManager : MonoBehaviour {
 
     private Player player;
 
+    public ParticleSystem clickOnFX;
+
     // Use this for initialization
     void Start () {
         player = new Player(this);
@@ -28,6 +30,11 @@ public class PlayerManager : MonoBehaviour {
             if (hit.transform.tag == "Unselectionable")
             {
                 player.setDestinacion(hit.point);
+
+                clickOnFX.transform.position = hit.point;
+
+                clickOnFX.Play();
+
             }
         }
     }
