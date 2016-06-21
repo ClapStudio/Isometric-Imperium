@@ -1,34 +1,47 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TreeManager : Resource {
+public class TreeManager : MonoBehaviour {
 
-    public float sourceQuantity;
+    public Shader normalShader;
+    public Shader outlineShader;
 
-    private float currentSourceQuantity;
+    //private Renderer rendered;
+    private bool isOver = false;
 
     // Use this for initialization
-    void Start () {
-        sourceQuantity = 50f;
-        
-        currentSourceQuantity = sourceQuantity;
+    void Start() {
+        //rendered = GetComponent<Renderer>();
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update() {
 
     }
 
-    public override float gather(float gatherSpeed)
-    {
-        float initialQuantity = currentSourceQuantity;
-        currentSourceQuantity -= gatherSpeed * Time.deltaTime;
-
-        return initialQuantity - currentSourceQuantity;
+    /*void OnMouseOver() {
+        if(!isOver) {
+            setShaderRecursive(transform, outlineShader);
+            isOver = true;
+        }
     }
 
-    public float getCurrentSourceQuantity()
-    {
-        return currentSourceQuantity;
+    void OnMouseExit() {
+        if (isOver) {
+            setShaderRecursive(transform, normalShader);
+            isOver = false;
+        }
     }
+
+    void setShaderRecursive(Transform parent, Shader shader) {
+        Renderer parentRenderer = parent.GetComponent<Renderer>();
+
+        if (parentRenderer) {
+            parentRenderer.material.shader = shader;
+        }
+
+        foreach (Transform child in parent) {
+            setShaderRecursive(child, shader);
+        }
+    }*/
 }
