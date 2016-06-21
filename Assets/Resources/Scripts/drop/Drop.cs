@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Inventories : MonoBehaviour {
+public class Drop : MonoBehaviour {
+
+	public int itemId;
 
 	// Use this for initialization
 	void Start () {

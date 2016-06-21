@@ -1,20 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
-public class Item : MonoBehaviour {
+[System.Serializable]
+public class Item {
 
     public string itemName;
-    public int itemID;
+    public int itemId;
     public string itemDesc;
     public Texture2D itemIcon;
-    public int itemPower;
-    public int itemSpeed;
     public ItemType itemType;
 
     public enum ItemType {
-
         Weapon,
-        Consumable,
-        Crafteable
+        Consumible,
+        Quest,
+		Material
     }
 }
