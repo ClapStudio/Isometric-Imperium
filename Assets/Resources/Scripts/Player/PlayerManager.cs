@@ -4,16 +4,18 @@ using System.Collections;
 public class PlayerManager : MonoBehaviour {
 
     private Player player;
-
+    public Animator anim;
     public ParticleSystem clickOnFX;
 
     // Use this for initialization
     void Start () {
         player = new Player(this);
+        anim = GetComponent<Animator>();
     }
 	
 	// Update is called once per frame
 	void Update () {
+
         if(Input.GetMouseButtonDown(0))
         {
             checkObjectSelected();
@@ -30,6 +32,8 @@ public class PlayerManager : MonoBehaviour {
             if (hit.transform.tag == "Unselectionable")
             {
                 player.setDestinacion(hit.point);
+
+                anim.SetBool("isWalking", true);
 
                 clickOnFX.transform.position = hit.point;
 
