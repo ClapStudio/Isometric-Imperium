@@ -19,8 +19,12 @@ public class PlayerManager : MonoBehaviour {
     [Header("Particles")]
     public ParticleSystem clickOnFX;
 
+    private Inventory inventory;
+
     // Use this for initialization
     void Start () {
+
+        inventory = GetComponent<Inventory>();
 
         player = new Player(this);
 
@@ -155,7 +159,7 @@ public class PlayerManager : MonoBehaviour {
 					clickOnFX.Play();
 					break;
 			case "Drop":
-				player.addItemToInventoryById(hit.transform.GetComponent<Drop>().itemId);
+                    inventory.addItemById(hit.transform.GetComponent<Drop>().itemId);
 				break;
 			}
         }
