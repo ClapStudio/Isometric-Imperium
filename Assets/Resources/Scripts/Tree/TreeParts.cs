@@ -6,7 +6,7 @@ public class TreeParts : MonoBehaviour {
     private Rigidbody rb;
     private float speed;
 
-    private float startFrames;
+    public float startFrames;
 
 	// Use this for initialization
 	void Start () {
@@ -15,7 +15,7 @@ public class TreeParts : MonoBehaviour {
 
         speed = 0.05f;
 
-        startFrames = 240;
+        startFrames = 120;
 	}
 	
 	// Update is called once per frame
@@ -25,7 +25,7 @@ public class TreeParts : MonoBehaviour {
 
         startFrames--;
 
-        if (startFrames <= 0) Destroy(this);
+        //if (startFrames <= 0) Destroy(this);
 
 	}
 }
