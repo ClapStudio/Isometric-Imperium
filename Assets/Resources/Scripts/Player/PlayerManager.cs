@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(Inventory))]
 public class PlayerManager : MonoBehaviour {
 
     public enum PlayerStates { AWAKE, IDLE, MOVING, GATHERING, DAMAGED, CRAFTING, DEAD }
