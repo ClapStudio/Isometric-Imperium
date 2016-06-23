@@ -1,84 +1,71 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
-public class Inventory : MonoBehaviour, IInventory {
-	
-	private List<Item> inventory = new List<Item>();
-    public int inventorySize;
-    public int slotsX, slotsY;
-    public GUISkin slotSkin;
+public class Inventory : MonoBehaviour {
 
-    private int maxSlotsRow = 5;
-    public bool showInventory;
-	private ItemDB itemDB;
+    
+    List<ItemData> inventory = new List<ItemData>();
+    int inventorySize = 25;
+    int maxSlotsRow = 5;
+	ItemDB itemDB;
 
 	// Use this for initialization
 	void Start () {
         itemDB = GameObject.FindGameObjectWithTag ("ItemDatabase").GetComponent<ItemDB>();
 		for(int i = 0; i < inventorySize; i++) {
-            inventory.Add(new Item());
+            inventory.Add(new ItemData());
         }
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	    if(Input.GetButtonDown("Inventory")) {
-            showInventory = !showInventory;
-        }
+
 	}
 
-	void OnGUI() {
-        GUI.skin = slotSkin;
+    public void addItem(Item item) {
 
-        if (showInventory) {
-            drawInventory();
-        }
-	}
+        //Check if is stackeable and exists
+        if(item.stackable && containsItem(item)) {
+            getItemData(item).amount += 1;
+        } else {
+            //Check if incentory is full
 
-    void drawInventoryFake() {
-        int slotPosition = 0;
-        for(int x = 0; x < slotsX; x++) {
-            for (int y = 0; y < slotsY; y++) {
-                Rect slotRect = new Rect(x * 60, y * 60, 50, 50);
-                GUI.Box(slotRect, x.ToString() + ":" + y.ToString(), slotSkin.GetStyle("Slot"));
-
-                slotPosition++;
-            }
-        }
-    }
-
-    void drawInventory() {
-        int row = 0;
-        int column = 0;
-        
-        for(int i = 0; i < inventory.Count; i++) {
-            Rect slotRect = new Rect(row * 60, column * 60, 50, 50);
-            GUI.Box(slotRect, "", slotSkin.GetStyle("Slot"));
-
-            if (inventory[i].itemName != null) {
-                GUI.DrawTexture(slotRect, inventory[i].itemIcon);
-            }
-
-            row++;
-            if(row == maxSlotsRow) {
-                row = 0;
-                column++;
-            }
-        }
-    }
-
-    void addItem(Item item) {
-        for(int i = 0; i < inventory.Count; i++) {
-            if(inventory[i].itemName == null) {
-                inventory[i] = item;
-                break;
+            if(inventory.Any(itemData => itemData.item == null)) {
+                //Find the first empty slot and add the new item to it
+                int slotPositionEmpty = inventory.FindIndex(itemData => itemData.item == null);
+                inventory[slotPositionEmpty] = new ItemData(item, 1);
+            } else {
+                //Inventory is full, throw Exception
+                throw new InventoryFullException();
             }
         }
     }
 
     public void addItemById(int itemId) {
-        Item itemResult = itemDB.items.Find(item => item.itemId == itemId);
+        Item itemResult = itemDB.items.Find(item => item.id == itemId);
         addItem(itemResult);
+    }
+
+    IItemData getItemData(Item itemToFind) {
+        return inventory.Find(itemData => itemData.item.id == itemToFind.id);
+    }
+
+    public IItemData getItemDataInSlot(int slot) {
+        return inventory[slot];
+    }
+
+    public bool isSlotEmpty(int slot) {
+        return inventory[slot].item == null;
+    }
+
+    public int getInventorySize() {
+        return inventorySize;
+    }
+
+
+    bool containsItem(Item itemToCheck) {
+        return inventory.Any(itemData => itemData.item != null && itemData.item.id == itemToCheck.id);
     }
 }
