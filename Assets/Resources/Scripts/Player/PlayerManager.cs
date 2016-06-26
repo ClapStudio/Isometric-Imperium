@@ -63,7 +63,10 @@ public class PlayerManager : MonoBehaviour {
 
         if (Input.GetMouseButtonDown(0))
         {
-            checkObjectSelected();
+            //Check if the mouse is on a UI element
+            if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) {
+                checkObjectSelected();
+            }
         }
         
 	}

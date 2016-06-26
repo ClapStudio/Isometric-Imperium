@@ -5,38 +5,39 @@ using System.Linq;
 
 public class Inventory : MonoBehaviour {
 
-    
     List<ItemData> inventory = new List<ItemData>();
     int inventorySize = 25;
     int maxSlotsRow = 5;
-	ItemDB itemDB;
+    ItemDB itemDB;
 
-	// Use this for initialization
-	void Start () {
-        itemDB = GameObject.FindGameObjectWithTag ("ItemDatabase").GetComponent<ItemDB>();
-		for(int i = 0; i < inventorySize; i++) {
+    // Use this for initialization
+    void Start() {
+        itemDB = GameObject.FindGameObjectWithTag("ItemDatabase").GetComponent<ItemDB>();
+        for (int i = 0; i < inventorySize; i++) {
             inventory.Add(new ItemData());
         }
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    }
 
-	}
+    // Update is called once per frame
+    void Update() {
+
+    }
 
     public void addItem(Item item) {
 
         //Check if is stackeable and exists
-        if(item.stackable && containsItem(item)) {
+        if (item.stackable && containsItem(item)) {
             getItemData(item).amount += 1;
-        } else {
+        }
+        else {
             //Check if incentory is full
 
-            if(inventory.Any(itemData => itemData.item == null)) {
+            if (inventory.Any(itemData => itemData.item == null)) {
                 //Find the first empty slot and add the new item to it
                 int slotPositionEmpty = inventory.FindIndex(itemData => itemData.item == null);
                 inventory[slotPositionEmpty] = new ItemData(item, 1);
-            } else {
+            }
+            else {
                 //Inventory is full, throw Exception
                 throw new InventoryFullException();
             }

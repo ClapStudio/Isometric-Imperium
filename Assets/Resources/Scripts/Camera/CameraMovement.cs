@@ -27,7 +27,10 @@ public class CameraMovement : MonoBehaviour {
         transform.position = target.position + offset;
         transform.LookAt(target.position);
 
-        ckeckControls();
+        //Check if the mouse is on a UI element
+        if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) {
+            ckeckControls();
+        }
 
         if (isControlCamera) {
             cameraControl();

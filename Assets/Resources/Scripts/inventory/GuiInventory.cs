@@ -1,60 +1,56 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
 public class GuiInventory : MonoBehaviour {
 
     public Inventory inventory;
+    public GameObject slotPrefab;
     public GUISkin inventorySkin;
-    
-    bool showInventory;
 
 	// Use this for initialization
 	void Start () {
+        drawInventory();
+        updateInventory();
 
     }
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetButtonDown("Inventory")) {
-            showInventory = !showInventory;
-        }
+        updateInventory();
     }
 
     void OnGUI() {
-        GUI.skin = inventorySkin;
-
-        if (showInventory) {
-            drawInventory();
-        }
+        //GUI.skin = inventorySkin;
+        
+        //drawInventory();
 
     }
 
     void drawInventory() {
-        int row = 0;
-        int column = 0;
-
-        //Estaria bien calcular este numero depeniendo el tamaño del inventario en la pantalla(En en caso que se pueda hacer la ventana mas grande)
-        int maxSlotsRow = 5;
-
+        //Create all Slots Prefabs
         for (int i = 0; i < inventory.getInventorySize(); i++) {
+            Instantiate(slotPrefab).transform.SetParent(transform);
+        }
+    }
 
-            Rect slotRect = new Rect(row * 60, column * 60, 50, 50);
-            GUI.Box(slotRect, "" , inventorySkin.GetStyle("Slot"));
-
-            if (!inventory.isSlotEmpty(i)) {
+    void updateInventory() {
+        for (int i = 0; i < inventory.getInventorySize(); i++) {
+            if (!inventory.isSlotEmpty(i)) { //If the current slot have an item, draw it
                 IItemData itemData = inventory.getItemDataInSlot(i);
-                GUI.DrawTexture(slotRect, itemData.item.icon);
-                if(itemData.amount > 1) {
-                    Rect labelRect = new Rect(row * 60, column * 60, 20, 20);
-                    GUI.Box(labelRect, itemData.amount.ToString());
+                transform.GetChild(i).GetChild(0).gameObject.SetActive(true);
+                transform.GetChild(i).GetChild(0).GetComponent<Image>().sprite = itemData.item.icon;
+
+                if (itemData.amount > 1) { //If it has more than 1 in the same slot, draw the quantity
+                    transform.GetChild(i).GetChild(0).GetChild(0).gameObject.SetActive(true);
+                    transform.GetChild(i).GetChild(0).GetChild(0).GetComponent<Text>().text = itemData.amount.ToString();
+                } else { //Hide quantity text
+                    transform.GetChild(i).GetChild(0).GetChild(0).gameObject.SetActive(false);
                 }
-            }
-            
-            row++;
-            if (row == maxSlotsRow) {
-                row = 0;
-                column++;
+
+            } else { //Hide sprite if there is no item
+                transform.GetChild(i).GetChild(0).gameObject.SetActive(false);
             }
         }
     }

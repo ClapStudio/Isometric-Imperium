@@ -11,7 +11,7 @@ public class Item : IItem {
     [SerializeField]
     string _desc;
     [SerializeField]
-    Texture2D _icon;
+    Sprite _icon;
     [SerializeField]
     ItemType _type;
     [SerializeField]
@@ -31,7 +31,7 @@ public class Item : IItem {
         get { return _desc; }
         set { _desc = value; }
     }
-    public Texture2D icon {
+    public Sprite icon {
         get { return _icon; }
         set { _icon = value; }
     }
